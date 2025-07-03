@@ -11,7 +11,7 @@ MODELS_DIR = 'models' # 直接在根目录创建
 OUTPUT_DIR = 'outputs' # 直接在根目录创建
 
 # --- 训练配置 ---
-BATCH_SIZE = 4
+BATCH_SIZE = 2
 LEARNING_RATE = 0.002
 MOMENTUM = 0.9
 WEIGHT_DECAY = 5e-4
@@ -21,8 +21,8 @@ LR_SCHEDULER_GAMMA = 0.9
 
 # --- 数据集子集配置 ---
 USE_SUBSET = True 
-TRAIN_SUBSET_SIZE = 8
-VAL_SUBSET_SIZE = 8
+TRAIN_SUBSET_SIZE = 4
+VAL_SUBSET_SIZE = 4
 
 # --- VOC 类别 ---
 VOC_CLASSES = [
