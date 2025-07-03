@@ -2,6 +2,7 @@ import torch
 import os
 import time
 from torchmetrics.detection import MeanAveragePrecision
+from tqdm import tqdm
 
 import config
 
@@ -25,7 +26,8 @@ class Trainer:
         total_loss, total_cls_loss, total_reg_loss = 0, 0, 0
         start_time = time.time()
 
-        for i, (images, targets) in enumerate(self.train_loader):
+        progress_bar = tqdm(self.train_loader, desc=f"Epoch {epoch}/{self.epochs} Training", leave=False)
+        for i, (images, targets) in enumerate(progress_bar):
             images = list(img.to(self.device) for img in images)
             
             targets_processed = []
@@ -54,11 +56,13 @@ class Trainer:
             losses.backward()
             self.optimizer.step()
             
+            cls_loss = loss_dict['classification'].item()
+            reg_loss = loss_dict['bbox_regression'].item()
             total_loss += losses.item()
-            total_cls_loss += loss_dict['classification'].item()
-            total_reg_loss += loss_dict['bbox_regression'].item()
+            total_cls_loss += cls_loss
+            total_reg_loss += reg_loss
             
-            print(f"Epoch [{epoch}/{self.epochs}], Step [{i+1}/{len(self.train_loader)}], Loss: {losses.item():.4f}")
+            progress_bar.set_postfix(loss=f"{losses.item():.4f}", cls=f"{cls_loss:.4f}", reg=f"{reg_loss:.4f}")
         
         epoch_duration = time.time() - start_time
         current_lr = self.optimizer.param_groups[0]['lr']
@@ -71,7 +75,8 @@ class Trainer:
         print(f"--- Validating on Epoch {epoch} ---")
 
         with torch.no_grad():
-            for images, targets in self.val_loader:
+            progress_bar = tqdm(self.val_loader, desc="Validating", leave=False)
+            for images, targets in progress_bar:
                 images = list(img.to(self.device) for img in images)
                 predictions = self.model(images)
                 
