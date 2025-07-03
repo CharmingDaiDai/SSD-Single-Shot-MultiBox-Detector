@@ -67,7 +67,7 @@ class Trainer:
     
     def _validate(self, epoch):
         self.model.eval()
-        metric = MeanAveragePrecision(box_format='xyxy', max_detection_threshold=300)
+        metric = MeanAveragePrecision(box_format='xyxy', max_detection_thresholds=[300])
         print(f"--- Validating on Epoch {epoch} ---")
 
         with torch.no_grad():
