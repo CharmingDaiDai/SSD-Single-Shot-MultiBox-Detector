@@ -1,0 +1,13 @@
+matplotlib==3.10.0
+numpy==2.0.1
+opencv-python==4.11.0.86
+Pillow==9.5.0
+six==1.17.0
+torch==2.7.1
+torchvision==0.22.1
+tqdm==4.67.1
+visdom==0.2.4
+Vizer==0.1.5
+wget==3.2
+yacs==0.1.8
+torchmetrics==1.7.3

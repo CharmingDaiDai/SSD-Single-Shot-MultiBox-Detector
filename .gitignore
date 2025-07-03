@@ -1,0 +1,10 @@
+__pycache__/
+__pypackages__/
+*.py[cod]
+*$py.class
+
+# 检查点
+checkpoints
+
+# 数据集
+VOC*
