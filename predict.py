@@ -11,7 +11,7 @@ from utils.viz import draw_bounding_boxes
 # --- 配置参数 ---
 # 模型权重路径
 # 注意：请确保这里指向一个您已经训练和保存的.pth文件
-CHECKPOINT_PATH = 'checkpoints/ssd300_voc_epoch_50.pth'
+CHECKPOINT_PATH = 'models/best_model.pth'
 # 待批量预测的图片目录
 IMAGE_DIR = 'images/'
 # 输出图片的保存路径
@@ -29,9 +29,9 @@ def predict_batch():
     # --- 1. 加载模型 ---
     print("Loading model...")
     # 创建模型结构，与训练时完全一致
-    # 重点：设置 weights=None 和 pretrained_backbone=False 来创建一个完全"冷"的模型
+    # 重点：设置 weights=None 和 weights_backbone=None 来创建一个完全"冷"的模型
     # 这样可以防止在加载本地权重之前进行任何不必要的下载
-    model = ssd300_vgg16(weights=None, pretrained_backbone=False, num_classes=NUM_CLASSES)
+    model = ssd300_vgg16(weights=None, weights_backbone=None, num_classes=NUM_CLASSES)
     
     # 对于使用VGG作为骨干的SSD300，需要手动设置一下分类头的参数
     # 否则，即使num_classes对了，内部的通道数也可能不匹配
