@@ -58,8 +58,7 @@ class Trainer:
             total_cls_loss += loss_dict['classification'].item()
             total_reg_loss += loss_dict['bbox_regression'].item()
             
-            if (i + 1) % 20 == 0:
-                print(f"Epoch [{epoch}/{self.epochs}], Step [{i+1}/{len(self.train_loader)}], Loss: {losses.item():.4f}")
+            print(f"Epoch [{epoch}/{self.epochs}], Step [{i+1}/{len(self.train_loader)}], Loss: {losses.item():.4f}")
         
         epoch_duration = time.time() - start_time
         current_lr = self.optimizer.param_groups[0]['lr']
@@ -68,7 +67,7 @@ class Trainer:
     
     def _validate(self, epoch):
         self.model.eval()
-        metric = MeanAveragePrecision(box_format='xyxy')
+        metric = MeanAveragePrecision(box_format='xyxy', max_detection_threshold=300)
         print(f"--- Validating on Epoch {epoch} ---")
 
         with torch.no_grad():
