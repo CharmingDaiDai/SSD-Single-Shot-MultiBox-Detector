@@ -119,16 +119,31 @@ def main():
                 best_map_from_checkpoint = checkpoint.get("best_map", 0.0)
                 
                 start_epoch = checkpoint.get("epoch", 0) + 1
-                # 手动设置config中的EPOCHS，以确保训练正确的轮数
-                # 注意：这里我们假设总轮数不变，只是从中间开始
-                # 如果需要调整总轮数，用户需要修改config.py
                 config.EPOCHS = max(config.EPOCHS, start_epoch)
                 
                 print(f"检查点加载成功，将从 Epoch {start_epoch} 继续训练。")
 
             except Exception as e:
                 print(f"加载检查点失败: {e}。将开始新的训练。")
-    
+        else:
+            # 如果用户选择不恢复，则询问是否删除旧的检查点
+            while True:
+                delete_choice = input("您选择不恢复训练。是否要删除所有旧的检查点? (y/n): ").lower().strip()
+                if delete_choice in ['y', 'n']:
+                    break
+            
+            if delete_choice == 'y':
+                print(f"正在删除目录 '{CHECKPOINT_DIR}' 中的所有检查点文件...")
+                try:
+                    for filename in os.listdir(CHECKPOINT_DIR):
+                        file_path = os.path.join(CHECKPOINT_DIR, filename)
+                        if os.path.isfile(file_path):
+                            os.remove(file_path)
+                            print(f" - 已删除: {filename}")
+                    print("所有检查点已成功删除。将开始新的训练。")
+                except Exception as e:
+                    print(f"删除检查点时出错: {e}")
+
     # 3. 实例化 Trainer
     print("Initializing Trainer...")
     trainer = Trainer(
@@ -136,7 +151,7 @@ def main():
         optimizer=optimizer,
         lr_scheduler=lr_scheduler,
         train_loader=train_loader,
-        val_loader=train_loader
+        val_loader=val_loader
     )
     trainer.best_map = best_map_from_checkpoint
     
