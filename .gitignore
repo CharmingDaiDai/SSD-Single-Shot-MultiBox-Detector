@@ -8,3 +8,6 @@ checkpoints
 
 # 数据集
 VOC*
+
+# 输出
+outputs
