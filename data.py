@@ -56,7 +56,7 @@ def get_dataloaders():
         dataset_train,
         batch_size=config.BATCH_SIZE,
         shuffle=True,
-        num_workers=4,
+        num_workers=1,
         collate_fn=collate_fn
     )
 
@@ -64,7 +64,7 @@ def get_dataloaders():
         dataset_val,
         batch_size=config.BATCH_SIZE,
         shuffle=False,
-        num_workers=4,
+        num_workers=1,
         collate_fn=collate_fn
     )
     
