@@ -72,6 +72,7 @@ class Trainer:
     def _validate(self, epoch):
         self.model.eval()
         metric = MeanAveragePrecision(box_format='xyxy')
+        metric.warn_on_many_detections = False  # 关闭警告
         print(f"--- Validating on Epoch {epoch} ---")
 
         with torch.no_grad():
